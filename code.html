@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Ticket Reservation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin: 20px 0;
+    }
+
+    .movie-container {
+      margin: 20px;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .screen {
+      background-color: #fff;
+      height: 80px;
+      width: 70%;
+      margin: 20px 0;
+      transform: rotateX(-45deg);
+      box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .seat {
+      background-color: #444451;
+      height: 25px;
+      width: 30px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .seat.selected {
+      background-color: #6feaf6;
+    }
+
+    .seat.occupied {
+      background-color: #fff;
+      cursor: not-allowed;
+    }
+
+    .showcase {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px auto;
+      width: 70%;
+    }
+
+    .showcase li {
+      display: flex;
+      align-items: center;
+      list-style: none;
+    }
+
+    .showcase .seat {
+      margin-right: 10px;
+    }
+
+    p.text {
+      margin: 20px;
+      font-size: 18px;
+    }
+
+    span {
+      color: #6feaf6;
+    }
+  </style>
+</head>
+<body>
+  <h1>Movie Ticket Reservation</h1>
+
+  <div class="movie-container">
+    <label for="movie">Pick a movie: </label>
+    <select id="movie">
+      <option value="10">Avengers: Endgame ($10)</option>
+      <option value="12">Joker ($12)</option>
+      <option value="8">Frozen II ($8)</option>
+      <option value="9">Toy Story 4 ($9)</option>
+    </select>
+  </div>
+
+  <ul class="showcase">
+    <li>
+      <div class="seat"></div>
+      <small>Available</small>
+    </li>
+    <li>
+      <div class="seat selected"></div>
+      <small>Selected</small>
+    </li>
+    <li>
+      <div class="seat occupied"></div>
+      <small>Occupied</small>
+    </li>
+  </ul>
+
+  <div class="container">
+    <div class="screen"></div>
+
+    <div class="row">
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat occupied"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+    </div>
+    <div class="row">
+      <div class="seat"></div>
+      <div class="seat occupied"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+    </div>
+    <div class="row">
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat occupied"></div>
+      <div class="seat"></div>
+    </div>
+  </div>
+
+  <p class="text">
+    You have selected <span id="count">0</span> seats for a price of $<span id="total">0</span>
+  </p>
+
+  <script>
+    const container = document.querySelector('.container');
+    const seats = document.querySelectorAll('.row .seat:not(.occupied)');
+    const count = document.getElementById('count');
+    const total = document.getElementById('total');
+    const movieSelect = document.getElementById('movie');
+
+    let ticketPrice = +movieSelect.value;
+
+    // Update total and count
+    function updateSelectedCount() {
+      const selectedSeats = document.querySelectorAll('.row .seat.selected');
+
+      const selectedSeatsCount = selectedSeats.length;
+
+      count.innerText = selectedSeatsCount;
+      total.innerText = selectedSeatsCount * ticketPrice;
+    }
+
+    // Movie select event
+    movieSelect.addEventListener('change', e => {
+      ticketPrice = +e.target.value;
+      updateSelectedCount();
+    });
+
+    // Seat click event
+    container.addEventListener('click', e => {
+      if (
+        e.target.classList.contains('seat') &&
+        !e.target.classList.contains('occupied')
+      ) {
+        e.target.classList.toggle('selected');
+        updateSelectedCount();
+      }
+    });
+  </script>
+</body>
+</html>
